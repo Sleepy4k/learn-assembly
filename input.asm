@@ -61,8 +61,8 @@ section .data
 
 section .bss
   ; Make buffer for data input
-  name_input resb name_input_len
-  age_input resb age_input_len
+  name_input: resb name_input_len
+  age_input: resb age_input_len
 
 section .text
   global _start
