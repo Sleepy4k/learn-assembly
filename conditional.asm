@@ -37,9 +37,8 @@ EXIT_CODE equ 0
 
 section .data
   ; Define constant data
+  number_data: equ 12
   username_input_len: equ 64
-  validation_value: db "sleepy4k"
-  validation_value_len: equ $ - validation_value
   
   ; Define variable with value
   separate: db "----------------------", 10
@@ -53,6 +52,18 @@ section .data
 
   username_invalid: db "Username invalid, silahkan coba lagi", 10
   username_invalid_len: equ $ - username_invalid
+
+  validation_data: db "sleepy4k"
+  validation_data_len: equ $ - validation_data
+
+  number_data_equal: db "Nomor ini sama dengan 0", 10
+  number_data_equal_len: equ $ - number_data_equal
+
+  number_data_less: db "Nomor ini kurang dari 0", 10
+  number_data_less_len: equ $ - number_data_less
+
+  number_data_more: db "Nomor ini lebih dari 0", 10
+  number_data_more_len: equ $ - number_data_more
 
 section .bss
   ; Make buffer for data input
@@ -69,8 +80,8 @@ _start:
     cin username_input
 
     mov rsi, username_input
-    mov rdi, validation_value
-    mov rcx, validation_value_len ; Length of the validation value
+    mov rdi, validation_data
+    mov rcx, validation_data_len ; Length of the validation value
   
     repe cmpsb ; Compare between username input data and validation value
     jne invalid_input ; Jump on this when return is false
@@ -78,8 +89,20 @@ _start:
 
 valid_input:
   cout username_valid, username_valid_len
-  exit EXIT_CODE
+
+  %if number_data > 0
+    cout number_data_more, number_data_more_len
+  %elif number_data == 0
+    cout number_data_equal, number_data_equal_len
+  %else
+    cout number_data_less, number_data_less_len
+  %endif
+
+  jmp end
 
 invalid_input:
   cout username_invalid, username_invalid_len
   jmp auth
+
+end:
+  exit EXIT_CODE
